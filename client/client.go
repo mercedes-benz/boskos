@@ -583,9 +583,13 @@ func (c *Client) metric(rtype string) (common.Metric, error) {
 
 func (c *Client) httpGet(action string, values url.Values) (*http.Response, error) {
 	u, _ := url.ParseRequestURI(c.url)
+	uString := u.String()
+	if u.Path != "" {
+		uString += "/" + u.Path
+	}
 	u.Path = action
 	u.RawQuery = values.Encode()
-	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, uString, nil)
 	if err != nil {
 		return nil, err
 	}
